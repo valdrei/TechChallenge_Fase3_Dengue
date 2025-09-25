@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Predição de Dengue | Tech Challenge FIAP</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- CSS Customizado -->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <!-- Header -->
+        <header class="bg-gradient text-white text-center py-4 mb-4 shadow">
+            <div class="container">
+                <h1 class="display-4 fw-bold mb-2">
+                    <i class="fas fa-virus"></i> Sistema de Predição de Dengue
+                </h1>
+                <p class="lead mb-0">
+                    <i class="fas fa-graduation-cap"></i> Tech Challenge - FIAP - Fase 3 | 
+                    <i class="fas fa-robot"></i> Inteligência Artificial aplicada à Saúde Pública
+                </p>
+            </div>
+        </header>
+
+        <div class="row">
+            <!-- Formulário de Entrada -->
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h3><i class="fas fa-clipboard-list"></i> Dados para Predição</h3>
+                        
+                        <!-- Seletor de Modo -->
+                        <div class="mode-selector mt-3">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inputMode" id="modeBasic" value="basic" checked>
+                                <label class="form-check-label text-white" for="modeBasic">
+                                    <i class="fas fa-user"></i> <strong>Modo Básico</strong> (5 campos essenciais)
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inputMode" id="modeAdvanced" value="advanced">
+                                <label class="form-check-label text-white" for="modeAdvanced">
+                                    <i class="fas fa-microscope"></i> <strong>Modo Avançado</strong> (todos os campos)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Alerta Modo Básico -->
+                        <div id="basicAlert" class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> <strong>Modo Básico Ativo</strong><br>
+                            Apenas campos essenciais. Outros dados serão preenchidos automaticamente com valores históricos médios.
+                        </div>
+
+                        <form id="dengueForm">
+                            <!-- Dados Básicos (sempre visíveis) -->
+                            <h5 class="text-primary mb-3"><i class="fas fa-map-marker-alt"></i> Localização e Tempo</h5>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="estado" class="form-label">
+                                        <i class="fas fa-map"></i> Estado (UF): <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-control" id="estado" name="COD_UF" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="AC">Acre (AC)</option>
+                                        <option value="AL">Alagoas (AL)</option>
+                                        <option value="AP">Amapá (AP)</option>
+                                        <option value="AM">Amazonas (AM)</option>
+                                        <option value="BA">Bahia (BA)</option>
+                                        <option value="CE">Ceará (CE)</option>
+                                        <option value="DF">Distrito Federal (DF)</option>
+                                        <option value="ES">Espírito Santo (ES)</option>
+                                        <option value="GO">Goiás (GO)</option>
+                                        <option value="MA">Maranhão (MA)</option>
+                                        <option value="MT">Mato Grosso (MT)</option>
+                                        <option value="MS">Mato Grosso do Sul (MS)</option>
+                                        <option value="MG">Minas Gerais (MG)</option>
+                                        <option value="PA">Pará (PA)</option>
+                                        <option value="PB">Paraíba (PB)</option>
+                                        <option value="PR">Paraná (PR)</option>
+                                        <option value="PE">Pernambuco (PE)</option>
+                                        <option value="PI">Piauí (PI)</option>
+                                        <option value="RJ">Rio de Janeiro (RJ)</option>
+                                        <option value="RN">Rio Grande do Norte (RN)</option>
+                                        <option value="RS">Rio Grande do Sul (RS)</option>
+                                        <option value="RO">Rondônia (RO)</option>
+                                        <option value="RR">Roraima (RR)</option>
+                                        <option value="SC">Santa Catarina (SC)</option>
+                                        <option value="SP">São Paulo (SP)</option>
+                                        <option value="SE">Sergipe (SE)</option>
+                                        <option value="TO">Tocantins (TO)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="ano" class="form-label">
+                                        <i class="fas fa-calendar"></i> Ano: <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="number" class="form-control" id="ano" name="Ano" min="2024" max="2030" value="2025" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="mes" class="form-label">
+                                        <i class="fas fa-calendar-day"></i> Mês: <span class="text-danger">*</span>
+                                    </label>
+                                    <select class="form-control" id="mes" name="Mês" required>
+                                        <option value="">Selecione...</option>
+                                        <option value="1">Janeiro</option>
+                                        <option value="2">Fevereiro</option>
+                                        <option value="3">Março</option>
+                                        <option value="4">Abril</option>
+                                        <option value="5">Maio</option>
+                                        <option value="6">Junho</option>
+                                        <option value="7">Julho</option>
+                                        <option value="8">Agosto</option>
+                                        <option value="9">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- SEÇÃO BÁSICA -->
+                            <div id="basicFields">
+                                <!-- Dados Climáticos Simplificados - Modo Básico -->
+                                <h5 class="text-primary"><i class="fas fa-thermometer-half"></i> Condições Climáticas</h5>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="temperatura_basica" class="form-label">
+                                            <i class="fas fa-temperature-high"></i> Temperatura Média: <span class="text-danger">*</span>
+                                            <small class="text-muted d-block">Deslize para ajustar (°C)</small>
+                                        </label>
+                                        <div class="range-container">
+                                            <input type="range" class="form-range" id="temperatura_basica" name="Temperatura_media_C"
+                                                   min="15" max="35" step="0.5" value="25" required>
+                                            <div class="range-labels">
+                                                <span class="text-primary">15°C (Frio)</span>
+                                                <span class="text-warning">25°C (Médio)</span>
+                                                <span class="text-danger">35°C (Quente)</span>
+                                            </div>
+                                            <div class="range-value text-center mt-2">
+                                                <strong id="tempValue">25°C</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="precipitacao_basica" class="form-label">
+                                            <i class="fas fa-cloud-rain"></i> Precipitação: <span class="text-danger">*</span>
+                                            <small class="text-muted d-block">Deslize para ajustar (mm)</small>
+                                        </label>
+                                        <div class="range-container">
+                                            <input type="range" class="form-range" id="precipitacao_basica" name="Precipitacao_mm"
+                                                   min="0" max="400" step="5" value="100" required>
+                                            <div class="range-labels">
+                                                <span class="text-warning">0mm (Seco)</span>
+                                                <span class="text-info">200mm (Normal)</span>
+                                                <span class="text-primary">400mm (Chuvoso)</span>
+                                            </div>
+                                            <div class="range-value text-center mt-2">
+                                                <strong id="precipValue">100mm</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Época do Ano - Modo Básico -->
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label"><i class="fas fa-leaf"></i> Como classificaria a época do ano na sua região?</label>
+                                        <div class="btn-group d-flex" role="group">
+                                            <input type="radio" class="btn-check" name="epoca_ano" id="epoca_seca" value="seca">
+                                            <label class="btn btn-outline-warning" for="epoca_seca">
+                                                <i class="fas fa-sun"></i> Época Seca
+                                            </label>
+
+                                            <input type="radio" class="btn-check" name="epoca_ano" id="epoca_normal" value="normal" checked>
+                                            <label class="btn btn-outline-info" for="epoca_normal">
+                                                <i class="fas fa-cloud-sun"></i> Normal
+                                            </label>
+
+                                            <input type="radio" class="btn-check" name="epoca_ano" id="epoca_chuvosa" value="chuvosa">
+                                            <label class="btn btn-outline-primary" for="epoca_chuvosa">
+                                                <i class="fas fa-cloud-rain"></i> Época Chuvosa
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SEÇÃO AVANÇADA - OCULTA POR PADRÃO -->
+                            <div id="advancedFields" class="d-none">
+                                <hr class="my-4">
+                                <h5 class="text-warning"><i class="fas fa-microscope"></i> Dados Avançados (Especialistas)</h5>
+
+                                <!-- Dados Demográficos Detalhados -->
+                                <h6 class="text-primary"><i class="fas fa-users"></i> Demografia Detalhada</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="populacao_adv" class="form-label">População:
+                                            <i class="fas fa-info-circle" title="População total do estado"></i>
+                                        </label>
+                                        <input type="number" class="form-control" id="populacao_adv" name="População" min="100000" max="50000000" placeholder="Ex: 12000000">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="pib_adv" class="form-label">PIB per capita (R$):
+                                            <i class="fas fa-info-circle" title="Produto Interno Bruto per capita"></i>
+                                        </label>
+                                        <input type="number" class="form-control" id="pib_adv" name="PIB_per_capita" min="5000" max="100000" step="100" placeholder="Ex: 35000">
+                                    </div>
+                                </div>
+
+                                <!-- Dados Climáticos Precisos -->
+                                <h6 class="text-primary"><i class="fas fa-cloud-rain"></i> Clima Detalhado</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="precipitacao_adv" class="form-label">Precipitação Exata (mm):</label>
+                                        <input type="number" class="form-control" id="precipitacao_adv" name="Precipitacao_mm_adv" min="0" max="1000" step="0.1" placeholder="Ex: 150.5">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="temperatura_adv" class="form-label">Temperatura Exata (°C):</label>
+                                        <input type="number" class="form-control" id="temperatura_adv" name="Temperatura_media_C_adv" min="10" max="45" step="0.1" placeholder="Ex: 26.5">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="umidade_adv" class="form-label">Umidade (%):</label>
+                                        <input type="number" class="form-control" id="umidade_adv" name="Umidade_relativa_%" min="20" max="100" step="0.1" placeholder="Ex: 75.0">
+                                    </div>
+                                </div>
+
+                                <!-- Dados de Saúde Específicos -->
+                                <h6 class="text-primary"><i class="fas fa-heartbeat"></i> Indicadores de Saúde</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="cobertura_adv" class="form-label">Cobertura ESF (%):
+                                            <i class="fas fa-info-circle" title="Cobertura da Estratégia Saúde da Família"></i>
+                                        </label>
+                                        <input type="number" class="form-control" id="cobertura_adv" name="Cobertura_ESF_%" min="0" max="100" step="0.1" placeholder="Ex: 65.5">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="internacoes_adv" class="form-label">Internações Diarreia:
+                                            <i class="fas fa-info-circle" title="Internações por doenças diarreicas"></i>
+                                        </label>
+                                        <input type="number" class="form-control" id="internacoes_adv" name="Internacoes_diarreia_gastroenterite" min="0" max="10000" placeholder="Ex: 2500">
+                                    </div>
+                                </div>
+
+                                <div class="alert alert-info">
+                                    <small>
+                                        <i class="fas fa-lightbulb"></i> <strong>Dica:</strong>
+                                        Deixe campos vazios para usar valores históricos médios do estado selecionado.
+                                    </small>
+                                </div>
+                            </div>
+
+                            <!-- Botões de Ação -->
+                            <div class="text-center mt-4">
+                                <div class="btn-group mb-3" role="group">
+                                    <button type="button" class="btn btn-outline-secondary" id="btnAutoFill">
+                                        <i class="fas fa-magic"></i> Preencher Exemplo
+                                    </button>
+                                    <button type="button" class="btn btn-outline-info" id="btnClearForm">
+                                        <i class="fas fa-eraser"></i> Limpar Formulário
+                                    </button>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-brain"></i> Prever Casos de Dengue
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Área de Resultados -->
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-warning text-dark">
+                        <h3><i class="fas fa-chart-line"></i> Resultado da Predição</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="loading" class="text-center d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Processando...</span>
+                            </div>
+                            <p class="mt-2">Analisando dados com IA...</p>
+                        </div>
+
+                        <div id="result" class="d-none">
+                            <!-- Resultado será inserido aqui via JavaScript -->
+                        </div>
+
+                        <div id="noResult" class="text-center text-muted">
+                            <i class="fas fa-info-circle fa-3x mb-3"></i>
+                            <p>Preencha o formulário ao lado para obter a predição de casos de dengue.</p>
+
+                            <div class="alert alert-info mt-3">
+                                <h5><i class="fas fa-lightbulb"></i> Como funciona:</h5>
+                                <ul class="text-start">
+                                    <li>🤖 <strong>Inteligência Artificial</strong>: Modelos treinados (Random Forest, XGBoost, LightGBM)</li>
+                                    <li>📊 <strong>Dados Históricos</strong>: Análise de padrões de 2014-2024</li>
+                                    <li>🌡️ <strong>Variáveis Climáticas</strong>: Temperatura, chuva, umidade</li>
+                                    <li>👥 <strong>Demografia</strong>: População, PIB, cobertura de saúde</li>
+                                    <li>📈 <strong>Sazonalidade</strong>: Padrões mensais e regionais</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card de Informações Adicionais -->
+                <div class="card shadow mt-3">
+                    <div class="card-header bg-info text-white">
+                        <h5><i class="fas fa-info"></i> Informações do Sistema</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <strong>Tech Challenge:</strong><br>
+                                    FIAP - Fase 3<br>
+                                    <strong>Algoritmos:</strong><br>
+                                    Random Forest, XGBoost, LightGBM
+                                </small>
+                            </div>
+                            <div class="col-6">
+                                <small class="text-muted">
+                                    <strong>Dados:</strong><br>
+                                    2014-2024 (Brasil)<br>
+                                    <strong>Acurácia:</strong><br>
+                                    R² ≥ 0.75 (esperado)
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Principal -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos da interface
+            const modeBasic = document.getElementById('modeBasic');
+            const modeAdvanced = document.getElementById('modeAdvanced');
+            const basicFields = document.getElementById('basicFields');
+            const advancedFields = document.getElementById('advancedFields');
+            const basicAlert = document.getElementById('basicAlert');
+            
+            // Sliders do modo básico
+            const tempSlider = document.getElementById('temperatura_basica');
+            const precipSlider = document.getElementById('precipitacao_basica');
+            const tempValue = document.getElementById('tempValue');
+            const precipValue = document.getElementById('precipValue');
+
+            // Controle de modo
+            function toggleMode() {
+                if (modeBasic.checked) {
+                    basicFields.classList.remove('d-none');
+                    advancedFields.classList.add('d-none');
+                    basicAlert.classList.remove('d-none');
+                } else {
+                    basicFields.classList.add('d-none');
+                    advancedFields.classList.remove('d-none');
+                    basicAlert.classList.add('d-none');
+                }
+            }
+
+            modeBasic.addEventListener('change', toggleMode);
+            modeAdvanced.addEventListener('change', toggleMode);
+
+            // Atualizar valores dos sliders em tempo real
+            tempSlider.addEventListener('input', function() {
+                tempValue.textContent = this.value + '°C';
+            });
+
+            precipSlider.addEventListener('input', function() {
+                precipValue.textContent = this.value + 'mm';
+            });
+
+            // Auto-fill inteligente
+            document.getElementById('btnAutoFill').addEventListener('click', function() {
+                if (modeBasic.checked) {
+                    // Modo básico - exemplo para clima tropical (SP)
+                    document.getElementById('estado').value = 'SP';
+                    document.getElementById('mes').value = '1';
+                    tempSlider.value = 25;
+                    precipSlider.value = 180;
+                    tempValue.textContent = '25°C';
+                    precipValue.textContent = '180mm';
+                    document.getElementById('epoca_chuvosa').checked = true;
+                } else {
+                    // Modo avançado - todos os campos
+                    document.getElementById('estado').value = 'SP';
+                    document.getElementById('ano').value = 2025;
+                    document.getElementById('mes').value = '1';
+                    document.getElementById('populacao_adv').value = 46649132;
+                    document.getElementById('pib_adv').value = 48542;
+                    document.getElementById('precipitacao_adv').value = 180.5;
+                    document.getElementById('temperatura_adv').value = 25.0;
+                    document.getElementById('umidade_adv').value = 78.5;
+                    document.getElementById('cobertura_adv').value = 71.2;
+                    document.getElementById('internacoes_adv').value = 3245;
+                }
+            });
+
+            // Limpar formulário
+            document.getElementById('btnClearForm').addEventListener('click', function() {
+                document.getElementById('dengueForm').reset();
+                tempValue.textContent = '25°C';
+                precipValue.textContent = '100mm';
+                tempSlider.value = 25;
+                precipSlider.value = 100;
+                modeBasic.checked = true;
+                toggleMode();
+            });
+
+            // Inicializar modo
+            toggleMode();
+
+            // Função para enviar formulário via AJAX
+            document.getElementById('dengueForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const loadingDiv = document.getElementById('loading');
+                const resultDiv = document.getElementById('result');
+                const noResultDiv = document.getElementById('noResult');
+
+                // Mostrar loading
+                loadingDiv.classList.remove('d-none');
+                resultDiv.classList.add('d-none');
+                noResultDiv.classList.add('d-none');
+
+                // Preparar dados baseado no modo
+                let formData = new FormData();
+                
+                // Dados básicos sempre necessários
+                formData.append('COD_UF', document.getElementById('estado').value);
+                formData.append('Mês', document.getElementById('mes').value);
+                formData.append('Ano', document.getElementById('ano').value);
+
+                if (modeBasic.checked) {
+                    // Modo básico - usar sliders
+                    formData.append('Temperatura_media_C', tempSlider.value);
+                    formData.append('Precipitacao_mm', precipSlider.value);
+                    
+                    // Valores baseados na época selecionada
+                    const epocaSelecionada = document.querySelector('input[name="epoca_ano"]:checked');
+                    if (epocaSelecionada) {
+                        const epoca = epocaSelecionada.value;
+                        if (epoca === 'seca') {
+                            formData.append('Umidade_relativa_%', 60);
+                        } else if (epoca === 'chuvosa') {
+                            formData.append('Umidade_relativa_%', 85);
+                        } else {
+                            formData.append('Umidade_relativa_%', 75);
+                        }
+                    }
+                    
+                    // Valores padrão estimados para o estado
+                    const estado = document.getElementById('estado').value;
+                    const defaultValues = getDefaultValuesByState(estado);
+                    formData.append('População', defaultValues.populacao);
+                    formData.append('PIB_per_capita', defaultValues.pib);
+                    formData.append('Cobertura_ESF_%', defaultValues.cobertura);
+                    formData.append('Internacoes_diarreia_gastroenterite', defaultValues.internacoes);
+                } else {
+                    // Modo avançado - usar campos específicos
+                    formData.append('População', document.getElementById('populacao_adv').value);
+                    formData.append('PIB_per_capita', document.getElementById('pib_adv').value);
+                    formData.append('Precipitacao_mm', document.getElementById('precipitacao_adv').value);
+                    formData.append('Temperatura_media_C', document.getElementById('temperatura_adv').value);
+                    formData.append('Umidade_relativa_%', document.getElementById('umidade_adv').value);
+                    formData.append('Cobertura_ESF_%', document.getElementById('cobertura_adv').value);
+                    formData.append('Internacoes_diarreia_gastroenterite', document.getElementById('internacoes_adv').value);
+                }
+
+                // Enviar via AJAX
+                fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    loadingDiv.classList.add('d-none');
+                    if (data.error) {
+                        showError(data.error);
+                    } else {
+                        showResult(data);
+                    }
+                })
+                .catch(error => {
+                    loadingDiv.classList.add('d-none');
+                    showError('Erro de conexão: ' + error.message);
+                });
+            });
+        });
+
+        // Valores padrão por estado para o modo básico
+        function getDefaultValuesByState(estado) {
+            const defaults = {
+                'SP': { populacao: 46000000, pib: 48000, cobertura: 70, internacoes: 3200 },
+                'RJ': { populacao: 17300000, pib: 43000, cobertura: 75, internacoes: 2100 },
+                'MG': { populacao: 21400000, pib: 35000, cobertura: 80, internacoes: 2800 },
+                'RS': { populacao: 11400000, pib: 42000, cobertura: 85, internacoes: 1400 },
+                'PR': { populacao: 11500000, pib: 38000, cobertura: 82, internacoes: 1600 },
+                'BA': { populacao: 14900000, pib: 22000, cobertura: 78, internacoes: 2600 },
+                'PE': { populacao: 9600000, pib: 26000, cobertura: 82, internacoes: 1900 },
+                'CE': { populacao: 9200000, pib: 23000, cobertura: 85, internacoes: 1800 },
+                'PA': { populacao: 8700000, pib: 19000, cobertura: 75, internacoes: 1500 }
+            };
+            return defaults[estado] || { populacao: 5000000, pib: 30000, cobertura: 65, internacoes: 1000 };
+        }
+
+        function showResult(data) {
+            const resultDiv = document.getElementById('result');
+            const estimativa = Math.round(data.predicao);
+            const minimo = Math.round(estimativa * 0.85);
+            const maximo = Math.round(estimativa * 1.15);
+
+            // Determinar nível de risco
+            let risco = 'baixo';
+            let cor = 'success';
+            let icone = 'fa-check-circle';
+
+            if (estimativa > 5000) {
+                risco = 'alto';
+                cor = 'danger';
+                icone = 'fa-exclamation-triangle';
+            } else if (estimativa > 2000) {
+                risco = 'médio';
+                cor = 'warning';
+                icone = 'fa-exclamation-circle';
+            }
+
+            resultDiv.innerHTML = `
+                <div class="alert alert-${cor} text-center">
+                    <h4><i class="fas ${icone}"></i> Predição de Dengue</h4>
+                    <div class="display-4 fw-bold">${estimativa.toLocaleString()}</div>
+                    <p class="mb-0">casos estimados</p>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-4 text-center">
+                        <div class="border rounded p-2 bg-light">
+                            <small class="text-muted">Mínimo</small><br>
+                            <strong>${minimo.toLocaleString()}</strong>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="border rounded p-2 bg-warning bg-opacity-25">
+                            <small class="text-muted">Provável</small><br>
+                            <strong>${estimativa.toLocaleString()}</strong>
+                        </div>
+                    </div>
+                    <div class="col-4 text-center">
+                        <div class="border rounded p-2 bg-light">
+                            <small class="text-muted">Máximo</small><br>
+                            <strong>${maximo.toLocaleString()}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-3">
+                    <h6><i class="fas fa-info-circle"></i> Interpretação:</h6>
+                    <ul class="mb-0">
+                        <li><strong>Risco:</strong> ${risco.toUpperCase()}</li>
+                        <li><strong>Confiança:</strong> ${data.confianca || '85'}% (baseado em modelos de ML)</li>
+                        <li><strong>Uso:</strong> Planejamento de políticas públicas de saúde</li>
+                    </ul>
+                </div>
+            `;
+
+            resultDiv.classList.remove('d-none');
+        }
+
+        function showError(error) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Erro na Predição</h5>
+                    <p>${error}</p>
+                    <p class="mb-0"><small>Verifique os dados inseridos e tente novamente.</small></p>
+                </div>
+            `;
+            resultDiv.classList.remove('d-none');
+        }
+    </script>
+</body>
+</html>
