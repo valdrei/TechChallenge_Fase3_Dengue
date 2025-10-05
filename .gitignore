@@ -124,6 +124,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+venv*
 ENV/
 env.bak/
 venv.bak/
@@ -194,15 +195,15 @@ data/dados_dengue_limpos.csv
 data/dados_com_features.csv
 data/X_features.csv
 data/y_target.csv
-data/*.pkl
-data/*.joblib
+# data/*.pkl  # DESCOMENTADO - permitir .pkl em data/processed/
+# data/*.joblib  # DESCOMENTADO - permitir .joblib em data/processed/
 
 # Modelos treinados (exceto os da pasta final_models)
 data/modelo_*.pkl
 data/modelo_*.joblib
-models/
-*.pkl
-*.joblib
+# models/  # DESCOMENTADO - incluir modelos no versionamento
+# *.pkl  # DESCOMENTADO - permitir .pkl nas pastas organizadas
+# *.joblib  # DESCOMENTADO - permitir .joblib nas pastas organizadas
 *.h5
 *.hdf5
 
@@ -212,6 +213,12 @@ models/
 !final_models/*.joblib
 !final_models/*.h5
 
+# Permitir arquivos .pkl nas pastas organizadas
+!models/**/*.pkl
+!models/**/*.joblib
+!data/processed/*.pkl
+!data/processed/*.joblib
+
 # Resultados e métricas
 data/feature_importance_*.csv
 data/metricas_*.csv
@@ -220,12 +227,12 @@ data/hiperparametros_*.txt
 data/lista_features.txt
 data/features_numericas_*.csv
 results/
-outputs/
+# outputs/  # DESCOMENTADO - incluir outputs no versionamento
 
 # Logs e relatórios
 logs/
 *.log
-reports/
+# reports/  # DESCOMENTADO - incluir relatórios no versionamento
 
 # Arquivos temporários do projeto
 temp/

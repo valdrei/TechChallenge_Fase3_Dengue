@@ -1,13 +1,14 @@
-# Dependências do Projeto - Predição Dengue ML
-# Tech Challenge - Fase 3 - FIAP
+# ==========================================
+# DEPENDÊNCIAS DO PROJETO - TechChallenge Fase 3
+# Predição de Casos de Dengue com Machine Learning
+# ==========================================
 
 # === CORE DATA SCIENCE ===
 pandas>=1.5.0
 numpy>=1.21.0
-scipy>=1.7.0
-
-# === MACHINE LEARNING ===
 scikit-learn>=1.2.0
+
+# === MACHINE LEARNING AVANÇADO ===
 xgboost>=1.7.0
 lightgbm>=3.3.0
 
@@ -16,24 +17,22 @@ matplotlib>=3.5.0
 seaborn>=0.11.0
 plotly>=5.10.0
 
-# === NOTEBOOK E UTILIDADES ===
+# === DESENVOLVIMENTO ===
 jupyter>=1.0.0
-ipywidgets>=7.6.0
-tqdm>=4.64.0
+joblib>=1.1.0
 
-# === MÉTRICAS E VALIDAÇÃO ===
-optuna>=3.0.0  # Para otimização bayesiana (opcional)
-
-# === DEPLOYMENT (PARA WEB INTERFACE) ===
+# === WEB APPLICATIONS ===
 flask>=2.3.0
-gunicorn>=21.0.0  # Para produção
-waitress>=2.1.0   # Servidor WSGI alternativo
+streamlit>=1.28.0
 
-# === DEPLOYMENT (OPCIONAL API) ===
-fastapi>=0.85.0
-uvicorn>=0.18.0
-pydantic>=1.10.0
+# === UTILITÁRIOS ===
+tqdm>=4.64.0
+gunicorn>=21.0.0
 
-# === OUTRAS UTILIDADES ===
-python-dateutil>=2.8.0
-pytz>=2022.1
+# === OTIMIZAÇÃO (OPCIONAL) ===
+optuna>=3.0.0
+
+# ==========================================
+# INSTALAÇÃO: pip install -r requirements.txt
+# Python: 3.8+
+# ==========================================
