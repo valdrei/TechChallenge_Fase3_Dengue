@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Predição de Dengue | Tech Challenge FIAP</title>
-    
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -21,7 +21,7 @@
                     <i class="fas fa-virus"></i> Sistema de Predição de Dengue
                 </h1>
                 <p class="lead mb-0">
-                    <i class="fas fa-graduation-cap"></i> Tech Challenge - FIAP - Fase 3 | 
+                    <i class="fas fa-graduation-cap"></i> Tech Challenge - FIAP - Fase 3 |
                     <i class="fas fa-robot"></i> Inteligência Artificial aplicada à Saúde Pública
                 </p>
             </div>
@@ -33,7 +33,7 @@
                 <div class="card shadow">
                     <div class="card-header bg-success text-white">
                         <h3><i class="fas fa-clipboard-list"></i> Dados para Predição</h3>
-                        
+
                         <!-- Seletor de Modo -->
                         <div class="mode-selector mt-3">
                             <div class="form-check form-check-inline">
@@ -100,7 +100,8 @@
                                     <label for="ano" class="form-label">
                                         <i class="fas fa-calendar"></i> Ano: <span class="text-danger">*</span>
                                     </label>
-                                    <input type="number" class="form-control" id="ano" name="Ano" min="2024" max="2030" value="2025" required>
+                                    <input type="number" class="form-control" id="ano" name="Ano" min="2014" max="2030" value="2025" required>
+                                    <small class="text-muted">2014-2024: Validação histórica | 2025+: Predições futuras</small>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="mes" class="form-label">
@@ -208,8 +209,9 @@
                                     <div class="col-md-6">
                                         <label for="pib_adv" class="form-label">PIB per capita (R$):
                                             <i class="fas fa-info-circle" title="Produto Interno Bruto per capita"></i>
+                                            <small class="text-muted d-block">Valores típicos: R$ 15.000 - R$ 80.000</small>
                                         </label>
-                                        <input type="number" class="form-control" id="pib_adv" name="PIB_per_capita" min="5000" max="100000" step="100" placeholder="Ex: 35000">
+                                        <input type="number" class="form-control" id="pib_adv" name="PIB_per_capita" min="5000" max="100000" step="1" placeholder="Ex: 48542">
                                     </div>
                                 </div>
 
@@ -218,7 +220,7 @@
                                 <div class="row mb-3">
                                     <div class="col-md-4">
                                         <label for="precipitacao_adv" class="form-label">Precipitação Exata (mm):</label>
-                                        <input type="number" class="form-control" id="precipitacao_adv" name="Precipitacao_mm_adv" min="0" max="1000" step="0.1" placeholder="Ex: 150.5">
+                                        <input type="number" class="form-control" id="precipitacao_adv" name="Precipitacao_mm_adv" min="0" max="1000" step="0.01" placeholder="Ex: 150.75">
                                     </div>
                                     <div class="col-md-4">
                                         <label for="temperatura_adv" class="form-label">Temperatura Exata (°C):</label>
@@ -345,7 +347,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- JavaScript Principal -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -355,12 +357,18 @@
             const basicFields = document.getElementById('basicFields');
             const advancedFields = document.getElementById('advancedFields');
             const basicAlert = document.getElementById('basicAlert');
-            
+
             // Sliders do modo básico
             const tempSlider = document.getElementById('temperatura_basica');
             const precipSlider = document.getElementById('precipitacao_basica');
             const tempValue = document.getElementById('tempValue');
             const precipValue = document.getElementById('precipValue');
+
+            // Verificar se todos os elementos existem
+            if (!modeBasic || !modeAdvanced || !basicFields || !advancedFields || !tempSlider || !precipSlider || !tempValue || !precipValue) {
+                console.error('Alguns elementos da interface não foram encontrados');
+                return;
+            }
 
             // Controle de modo
             function toggleMode() {
@@ -378,17 +386,22 @@
             modeBasic.addEventListener('change', toggleMode);
             modeAdvanced.addEventListener('change', toggleMode);
 
-            // Atualizar valores dos sliders em tempo real
-            tempSlider.addEventListener('input', function() {
-                tempValue.textContent = this.value + '°C';
-            });
+            if (tempSlider && tempValue) {
+                tempSlider.addEventListener('input', function() {
+                    tempValue.textContent = this.value + '°C';
+                });
+            }
 
-            precipSlider.addEventListener('input', function() {
-                precipValue.textContent = this.value + 'mm';
-            });
+            if (precipSlider && precipValue) {
+                precipSlider.addEventListener('input', function() {
+                    precipValue.textContent = this.value + 'mm';
+                });
+            }
 
             // Auto-fill inteligente
-            document.getElementById('btnAutoFill').addEventListener('click', function() {
+            const btnAutoFill = document.getElementById('btnAutoFill');
+            if (btnAutoFill) {
+                btnAutoFill.addEventListener('click', function() {
                 if (modeBasic.checked) {
                     // Modo básico - exemplo para clima tropical (SP)
                     document.getElementById('estado').value = 'SP';
@@ -411,24 +424,30 @@
                     document.getElementById('cobertura_adv').value = 71.2;
                     document.getElementById('internacoes_adv').value = 3245;
                 }
-            });
+                });
+            }
 
-            // Limpar formulário
-            document.getElementById('btnClearForm').addEventListener('click', function() {
-                document.getElementById('dengueForm').reset();
-                tempValue.textContent = '25°C';
-                precipValue.textContent = '100mm';
-                tempSlider.value = 25;
-                precipSlider.value = 100;
-                modeBasic.checked = true;
-                toggleMode();
-            });
+            const btnClearForm = document.getElementById('btnClearForm');
+            if (btnClearForm) {
+                btnClearForm.addEventListener('click', function() {
+                    const dengueForm = document.getElementById('dengueForm');
+                    if (dengueForm) dengueForm.reset();
+                    if (tempValue) tempValue.textContent = '25°C';
+                    if (precipValue) precipValue.textContent = '100mm';
+                    if (tempSlider) tempSlider.value = 25;
+                    if (precipSlider) precipSlider.value = 100;
+                    if (modeBasic) modeBasic.checked = true;
+                    toggleMode();
+                });
+            }
 
             // Inicializar modo
             toggleMode();
 
             // Função para enviar formulário via AJAX
-            document.getElementById('dengueForm').addEventListener('submit', function(e) {
+            const dengueForm = document.getElementById('dengueForm');
+            if (dengueForm) {
+                dengueForm.addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 const loadingDiv = document.getElementById('loading');
@@ -442,7 +461,7 @@
 
                 // Preparar dados baseado no modo
                 let formData = new FormData();
-                
+
                 // Dados básicos sempre necessários
                 formData.append('COD_UF', document.getElementById('estado').value);
                 formData.append('Mês', document.getElementById('mes').value);
@@ -450,9 +469,10 @@
 
                 if (modeBasic.checked) {
                     // Modo básico - usar sliders
+                    formData.append('modo', 'basico');
                     formData.append('Temperatura_media_C', tempSlider.value);
                     formData.append('Precipitacao_mm', precipSlider.value);
-                    
+
                     // Valores baseados na época selecionada
                     const epocaSelecionada = document.querySelector('input[name="epoca_ano"]:checked');
                     if (epocaSelecionada) {
@@ -465,7 +485,7 @@
                             formData.append('Umidade_relativa_%', 75);
                         }
                     }
-                    
+
                     // Valores padrão estimados para o estado
                     const estado = document.getElementById('estado').value;
                     const defaultValues = getDefaultValuesByState(estado);
@@ -475,6 +495,7 @@
                     formData.append('Internacoes_diarreia_gastroenterite', defaultValues.internacoes);
                 } else {
                     // Modo avançado - usar campos específicos
+                    formData.append('modo', 'avancado');
                     formData.append('População', document.getElementById('populacao_adv').value);
                     formData.append('PIB_per_capita', document.getElementById('pib_adv').value);
                     formData.append('Precipitacao_mm', document.getElementById('precipitacao_adv').value);
@@ -502,83 +523,232 @@
                     loadingDiv.classList.add('d-none');
                     showError('Erro de conexão: ' + error.message);
                 });
-            });
+                });
+            }
         });
 
         // Valores padrão por estado para o modo básico
         function getDefaultValuesByState(estado) {
             const defaults = {
-                'SP': { populacao: 46000000, pib: 48000, cobertura: 70, internacoes: 3200 },
-                'RJ': { populacao: 17300000, pib: 43000, cobertura: 75, internacoes: 2100 },
-                'MG': { populacao: 21400000, pib: 35000, cobertura: 80, internacoes: 2800 },
-                'RS': { populacao: 11400000, pib: 42000, cobertura: 85, internacoes: 1400 },
-                'PR': { populacao: 11500000, pib: 38000, cobertura: 82, internacoes: 1600 },
-                'BA': { populacao: 14900000, pib: 22000, cobertura: 78, internacoes: 2600 },
-                'PE': { populacao: 9600000, pib: 26000, cobertura: 82, internacoes: 1900 },
-                'CE': { populacao: 9200000, pib: 23000, cobertura: 85, internacoes: 1800 },
-                'PA': { populacao: 8700000, pib: 19000, cobertura: 75, internacoes: 1500 }
+                'SP': { populacao: 46000000, pib: 48542, cobertura: 70, internacoes: 3200 },
+                'RJ': { populacao: 17300000, pib: 43267, cobertura: 75, internacoes: 2100 },
+                'MG': { populacao: 21400000, pib: 35125, cobertura: 80, internacoes: 2800 },
+                'RS': { populacao: 11400000, pib: 42358, cobertura: 85, internacoes: 1400 },
+                'PR': { populacao: 11500000, pib: 38445, cobertura: 82, internacoes: 1600 },
+                'BA': { populacao: 14900000, pib: 22156, cobertura: 78, internacoes: 2600 },
+                'PE': { populacao: 9600000, pib: 26734, cobertura: 82, internacoes: 1900 },
+                'CE': { populacao: 9200000, pib: 23892, cobertura: 85, internacoes: 1800 },
+                'PA': { populacao: 8700000, pib: 19567, cobertura: 75, internacoes: 1500 }
             };
-            return defaults[estado] || { populacao: 5000000, pib: 30000, cobertura: 65, internacoes: 1000 };
+            return defaults[estado] || { populacao: 5000000, pib: 30258, cobertura: 65, internacoes: 1000 };
         }
 
         function showResult(data) {
             const resultDiv = document.getElementById('result');
-            const estimativa = Math.round(data.predicao);
-            const minimo = Math.round(estimativa * 0.85);
-            const maximo = Math.round(estimativa * 1.15);
 
-            // Determinar nível de risco
-            let risco = 'baixo';
-            let cor = 'success';
-            let icone = 'fa-check-circle';
+            // Verifica se temos dados dos múltiplos modelos
+            if (data.modelos) {
+                // Novo formato com múltiplos modelos
+                let htmlContent = `
+                    <div class="alert alert-success text-center mb-4">
+                        <h4><i class="fas fa-robot"></i> Predições dos Modelos de IA</h4>
+                        <p class="mb-0">Comparação entre os 3 modelos desenvolvidos no Tech Challenge</p>
+                    </div>
+                `;
 
-            if (estimativa > 5000) {
-                risco = 'alto';
-                cor = 'danger';
-                icone = 'fa-exclamation-triangle';
-            } else if (estimativa > 2000) {
-                risco = 'médio';
-                cor = 'warning';
-                icone = 'fa-exclamation-circle';
+                // Cards para cada modelo
+                const modelos = data.modelos;
+                const modeloKeys = ['super_otimizado', 'otimizado', 'baseline'];
+                const cores = ['primary', 'success', 'warning'];
+                const icones = ['fa-rocket', 'fa-star', 'fa-tree'];
+
+                modeloKeys.forEach((key, index) => {
+                    if (modelos[key]) {
+                        const modelo = modelos[key];
+                        const estimativa = Math.round(modelo.predicao);
+                        const minimo = Math.round(modelo.confianca_min);
+                        const maximo = Math.round(modelo.confianca_max);
+
+                        // Determinar status
+                        let statusBadge = modelo.disponivel ?
+                            '<span class="badge bg-success"><i class="fas fa-check"></i> Modelo Real</span>' :
+                            '<span class="badge bg-secondary"><i class="fas fa-flask"></i> Simulado</span>';
+
+                        htmlContent += `
+                            <div class="card mb-3 border-${cores[index]}">
+                                <div class="card-header bg-${cores[index]} text-white">
+                                    <h5 class="mb-0">
+                                        <i class="fas ${icones[index]}"></i> ${modelo.nome}
+                                        <span class="float-end">${statusBadge}</span>
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row text-center">
+                                        <div class="col-3">
+                                            <div class="border rounded p-2 bg-light">
+                                                <small class="text-muted">Mínimo</small><br>
+                                                <strong>${minimo.toLocaleString()}</strong>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="border rounded p-3 bg-${cores[index]} bg-opacity-10">
+                                                <small class="text-muted">PREDIÇÃO</small><br>
+                                                <div class="display-6 fw-bold text-${cores[index]}">${estimativa.toLocaleString()}</div>
+                                                <small class="text-muted">casos estimados</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-3">
+                                            <div class="border rounded p-2 bg-light">
+                                                <small class="text-muted">Máximo</small><br>
+                                                <strong>${maximo.toLocaleString()}</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <p class="text-muted mb-1">${modelo.detalhes || 'Modelo de machine learning treinado'}</p>
+                                        <div class="row text-center">
+                                            <div class="col-4">
+                                                <small class="text-muted">Baseline:<br><strong>${modelo.baseline.toLocaleString()}</strong></small>
+                                            </div>
+                                            <div class="col-4">
+                                                <small class="text-muted">Confiança:<br><strong>${modelo.nivel_confianca.toUpperCase()}</strong></small>
+                                            </div>
+                                            <div class="col-4">
+                                                <small class="text-muted">Variação:<br><strong>±${Math.round(((maximo - minimo) / estimativa) * 100)}%</strong></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                // Resumo comparativo
+                const resumo = data.resumo;
+                if (resumo) {
+                    const mediaEstimativa = Math.round(resumo.predicao_media);
+                    const melhorEstimativa = Math.round(resumo.menor_predicao);
+                    const piorEstimativa = Math.round(resumo.maior_predicao);
+
+                    // Determinar nível de risco geral
+                    let risco = 'baixo';
+                    let corRisco = 'success';
+                    let iconeRisco = 'fa-check-circle';
+
+                    if (mediaEstimativa > 5000) {
+                        risco = 'alto';
+                        corRisco = 'danger';
+                        iconeRisco = 'fa-exclamation-triangle';
+                    } else if (mediaEstimativa > 2000) {
+                        risco = 'médio';
+                        corRisco = 'warning';
+                        iconeRisco = 'fa-exclamation-circle';
+                    }
+
+                    htmlContent += `
+                        <div class="alert alert-${corRisco} mt-4">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5><i class="fas ${iconeRisco}"></i> Análise Consolidada</h5>
+                                    <ul class="mb-0">
+                                        <li><strong>Predição Média:</strong> ${mediaEstimativa.toLocaleString()} casos</li>
+                                        <li><strong>Faixa de Variação:</strong> ${melhorEstimativa.toLocaleString()} - ${piorEstimativa.toLocaleString()} casos</li>
+                                        <li><strong>Modelo Mais Conservador:</strong> ${resumo.melhor_modelo}</li>
+                                        <li><strong>Nível de Risco:</strong> ${risco.toUpperCase()}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="display-5 fw-bold">${mediaEstimativa.toLocaleString()}</div>
+                                    <small class="text-muted">Média dos Modelos</small>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Informações técnicas
+                htmlContent += `
+                    <div class="alert alert-info mt-3">
+                        <h6><i class="fas fa-info-circle"></i> Informações Técnicas:</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="mb-0">
+                                    <li><strong>Algoritmos:</strong> Random Forest, XGBoost, Ensemble</li>
+                                    <li><strong>Features:</strong> ${data.dados_usados} variáveis utilizadas</li>
+                                    <li><strong>Estado:</strong> ${data.estado_nome}</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="mb-0">
+                                    <li><strong>Propósito:</strong> Planejamento de políticas públicas</li>
+                                    <li><strong>Validação:</strong> TimeSeriesSplit cross-validation</li>
+                                    <li><strong>Tech Challenge:</strong> FIAP - Fase 3</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                resultDiv.innerHTML = htmlContent;
+            } else {
+                // Formato antigo (fallback)
+                const estimativa = Math.round(data.predicao);
+                const minimo = Math.round(estimativa * 0.85);
+                const maximo = Math.round(estimativa * 1.15);
+
+                let risco = 'baixo';
+                let cor = 'success';
+                let icone = 'fa-check-circle';
+
+                if (estimativa > 5000) {
+                    risco = 'alto';
+                    cor = 'danger';
+                    icone = 'fa-exclamation-triangle';
+                } else if (estimativa > 2000) {
+                    risco = 'médio';
+                    cor = 'warning';
+                    icone = 'fa-exclamation-circle';
+                }
+
+                resultDiv.innerHTML = `
+                    <div class="alert alert-${cor} text-center">
+                        <h4><i class="fas ${icone}"></i> Predição de Dengue</h4>
+                        <div class="display-4 fw-bold">${estimativa.toLocaleString()}</div>
+                        <p class="mb-0">casos estimados</p>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-4 text-center">
+                            <div class="border rounded p-2 bg-light">
+                                <small class="text-muted">Mínimo</small><br>
+                                <strong>${minimo.toLocaleString()}</strong>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="border rounded p-2 bg-warning bg-opacity-25">
+                                <small class="text-muted">Provável</small><br>
+                                <strong>${estimativa.toLocaleString()}</strong>
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div class="border rounded p-2 bg-light">
+                                <small class="text-muted">Máximo</small><br>
+                                <strong>${maximo.toLocaleString()}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-3">
+                        <h6><i class="fas fa-info-circle"></i> Interpretação:</h6>
+                        <ul class="mb-0">
+                            <li><strong>Risco:</strong> ${risco.toUpperCase()}</li>
+                            <li><strong>Confiança:</strong> ${data.confianca || '85'}% (baseado em modelos de ML)</li>
+                            <li><strong>Uso:</strong> Planejamento de políticas públicas de saúde</li>
+                        </ul>
+                    </div>
+                `;
             }
-
-            resultDiv.innerHTML = `
-                <div class="alert alert-${cor} text-center">
-                    <h4><i class="fas ${icone}"></i> Predição de Dengue</h4>
-                    <div class="display-4 fw-bold">${estimativa.toLocaleString()}</div>
-                    <p class="mb-0">casos estimados</p>
-                </div>
-                
-                <div class="row mt-3">
-                    <div class="col-4 text-center">
-                        <div class="border rounded p-2 bg-light">
-                            <small class="text-muted">Mínimo</small><br>
-                            <strong>${minimo.toLocaleString()}</strong>
-                        </div>
-                    </div>
-                    <div class="col-4 text-center">
-                        <div class="border rounded p-2 bg-warning bg-opacity-25">
-                            <small class="text-muted">Provável</small><br>
-                            <strong>${estimativa.toLocaleString()}</strong>
-                        </div>
-                    </div>
-                    <div class="col-4 text-center">
-                        <div class="border rounded p-2 bg-light">
-                            <small class="text-muted">Máximo</small><br>
-                            <strong>${maximo.toLocaleString()}</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="alert alert-info mt-3">
-                    <h6><i class="fas fa-info-circle"></i> Interpretação:</h6>
-                    <ul class="mb-0">
-                        <li><strong>Risco:</strong> ${risco.toUpperCase()}</li>
-                        <li><strong>Confiança:</strong> ${data.confianca || '85'}% (baseado em modelos de ML)</li>
-                        <li><strong>Uso:</strong> Planejamento de políticas públicas de saúde</li>
-                    </ul>
-                </div>
-            `;
 
             resultDiv.classList.remove('d-none');
         }
