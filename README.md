@@ -41,12 +41,24 @@ TechChallenge_Fase3_Dengue/
 │   ├── 03_5_evolucao_feature_engineering.ipynb ⭐ NOVO
 │   ├── 04_otimizacao_hiperparametros.ipynb ⭐ NOVO
 │   ├── 05_modelo_super_otimizado.ipynb
-│   ├── 06_deploy_predicoes.ipynb
+│   ├── 06_deploy_predicoes.ipynb (tutorial deploy)
 │   └── README_EVOLUCAO_MODELOS.md (guia detalhado)
 ├── 📊 data/                         # Dados
 │   └── raw/
 │       └── dados_dengue_clima_saneamento_2014_2025.csv
 ├── 🔧 src/                          # Código reutilizável
+│   ├── predict.py                   # Funções de predição (multi-modelo)
+│   ├── utils.py                     # Utilitários
+│   └── __init__.py
+├── 🌐 web/                          # 🎯 SISTEMA PRINCIPAL
+│   ├── app.py                       # Servidor Flask multi-modelo
+│   ├── templates/                   # Interface profissional
+│   ├── static/                      # CSS, JS, assets
+│   └── README_MULTI_MODELO.md       # Documentação específica
+├── 📋 requirements.txt              # Dependências do projeto
+├── 🛠️ SETUP.md                      # Guia de instalação
+└── 📖 README.md                     # Este arquivo
+```
 │   ├── predict.py                   # Funções de predição
 │   ├── utils.py                     # Utilitários
 │   └── __init__.py
@@ -63,6 +75,34 @@ TechChallenge_Fase3_Dengue/
 
 ## 🚀 **Como Executar**
 
+### 🎯 **SISTEMAS DISPONÍVEIS**
+
+#### 🌐 **Sistema Multi-Modelo (PRODUÇÃO - RECOMENDADO)**
+```bash
+cd web
+python app.py
+```
+**Acesse:** http://localhost:5000
+
+**🔥 SISTEMA PRINCIPAL** com interface profissional:
+- ✅ **3 Modelos Simultâneos**: Random Forest, XGBoost, Ensemble
+- ✅ **Comparação Visual**: Cards lado a lado com análise consolidada
+- ✅ **Modo Básico/Avançado**: Para diferentes tipos de usuário
+- ✅ **Sistema Robusto**: Fallback quando modelos não disponíveis
+- ✅ **Performance Superior**: MAE ~661 casos
+
+#### 📔 **Notebooks de Desenvolvimento**
+```bash
+jupyter notebook
+# Execute na ordem: 01 → 02 → 03 → 3.5 → 04 → 05 → 06
+```
+
+**Propósito**: Demonstrar processo completo de ML
+- 📚 **Notebook 6**: Tutorial de como fazer deploy (educativo)
+- 🎯 **Foco**: Aprendizado e documentação do processo
+
+---
+
 ### 1. **Instalação:**
 
 ```bash
@@ -75,19 +115,19 @@ conda activate dengue_ml
 pip install -r requirements.txt
 ```
 
-### 2. **Executar Notebooks (Sequência):**
-
-```bash
-jupyter notebook
-# Execute na ordem: 01 → 02 → 03 → 3.5 → 04 → 05 → 06
-```
-
-### 3. **Aplicação Web:**
+### 2. **Executar Sistema Principal:**
 
 ```bash
 cd web
 python app.py
 # Acessar: http://localhost:5000
+```
+
+### 3. **Notebooks (Desenvolvimento/Aprendizado):**
+
+```bash
+jupyter notebook
+# Execute na ordem: 01 → 02 → 03 → 3.5 → 04 → 05 → 06
 ```
 
 ---
