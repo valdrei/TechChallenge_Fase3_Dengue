@@ -1,108 +1,212 @@
-# 🦟 TechChallenge Fase 3 - Predição de Casos de Dengue
+# 🦟 Sistema de Predição de Dengue# 🦟 TechChallenge Fase 3 - Predição de Casos de Dengue
+
+**Tech Challenge - Fase 3 - FIAP**
 
 ## 🎯 Visão Geral do Projeto
 
+## 🎯 Sobre o Projeto
+
 Este projeto implementa um sistema completo de machine learning para **predição de casos de dengue** no Brasil, demonstrando a **evolução gradual dos modelos** desde baseline até super otimizado, com uma melhoria de **93% na precisão** das predições.
 
+Sistema completo de machine learning para predição de casos de dengue no Brasil, demonstrando evolução gradual dos modelos desde baseline até super otimizado.
+
 ### 🏆 **Resultados Alcançados:**
-- **MAE Final**: 404 casos (vs 1,681 baseline = 76% melhoria)
-- **R² Score**: 0.995 (precisão excepcional)
-- **Caso Crítico**: SP Jun/2023 erro reduzido de 225% para 16.5%
-- **Coverage**: Todos os 27 estados brasileiros (2014-2025)
+
+### 🏆 Resultados Alcançados- **MAE Final**: 404 casos (vs 1,681 baseline = 76% melhoria)
+
+- **MAE Final**: 404 casos (melhoria de 76% vs baseline)- **R² Score**: 0.995 (precisão excepcional)
+
+- **R² Score**: 0.995 (precisão excepcional)  - **Caso Crítico**: SP Jun/2023 erro reduzido de 225% para 16.5%
+
+- **Coverage**: Todos os 27 estados brasileiros (2014-2025)- **Coverage**: Todos os 27 estados brasileiros (2014-2025)
+
+
+
+------
+
+
+
+## 🚀 Como Executar## 📊 **Estrutura dos Notebooks - Evolução dos Modelos**
+
+
+
+### 1️⃣ Instalação### 🎯 **Sequência Lógica Demonstrando Evolução:**
+
+```bash
+
+pip install -r requirements.txt| Notebook | Técnica Principal | MAE Esperado | Melhoria | Objetivo |
+
+```|----------|------------------|--------------|----------|----------|
+
+| **1** | Problema e EDA | - | - | Definição e exploração |
+
+### 2️⃣ Sistema Web (Recomendado)| **2** | Processamento básico | - | - | Preparação dos dados |
+
+```bash| **3** | Modelos baseline | 1,500-2,500 | - | Estabelecer referência |
+
+cd web| **3.5** ⭐ | Feature Engineering | 700-900 | 40-60% | Impacto das features |
+
+python app.py| **4** ⭐ | Otimização | 600-800 | 15-25% | Impacto dos hiperparâmetros |
+
+```| **5** | Super Otimizado | ~400 | 30-50% | Modelo final |
+
+Acesse: http://localhost:5000| **6** | Deploy | - | - | Sistema em produção |
+
+
+
+### 3️⃣ Notebooks Jupyter> **✨ Notebooks 3.5 e 4 são novos** e demonstram claramente o impacto de cada técnica!
+
+Execute na sequência: 01 → 02 → 03 → 04 → 05 → 06
 
 ---
-
-## 📊 **Estrutura dos Notebooks - Evolução dos Modelos**
-
-### 🎯 **Sequência Lógica Demonstrando Evolução:**
-
-| Notebook | Técnica Principal | MAE Esperado | Melhoria | Objetivo |
-|----------|------------------|--------------|----------|----------|
-| **1** | Problema e EDA | - | - | Definição e exploração |
-| **2** | Processamento básico | - | - | Preparação dos dados |
-| **3** | Modelos baseline | 1,500-2,500 | - | Estabelecer referência |
-| **3.5** ⭐ | Feature Engineering | 700-900 | 40-60% | Impacto das features |
-| **4** ⭐ | Otimização | 600-800 | 15-25% | Impacto dos hiperparâmetros |
-| **5** | Super Otimizado | ~400 | 30-50% | Modelo final |
-| **6** | Deploy | - | - | Sistema em produção |
-
-> **✨ Notebooks 3.5 e 4 são novos** e demonstram claramente o impacto de cada técnica!
 
 ---
 
 ## 📁 **Estrutura do Projeto**
 
+## 📊 Estrutura do Projeto
+
 ```
-TechChallenge_Fase3_Dengue/
-├── 📓 notebooks/                    # Notebooks sequenciais
-│   ├── 01_problema_e_coleta_dados.ipynb
-│   ├── 02_processamento_feature_engineering.ipynb
-│   ├── 03_modelagem_avaliacao.ipynb (baseline)
-│   ├── 03_5_evolucao_feature_engineering.ipynb ⭐ NOVO
-│   ├── 04_otimizacao_hiperparametros.ipynb ⭐ NOVO
-│   ├── 05_modelo_super_otimizado.ipynb
-│   ├── 06_deploy_predicoes.ipynb (tutorial deploy)
+
+```TechChallenge_Fase3_Dengue/
+
+TechChallenge_Fase3_Dengue/├── 📓 notebooks/                    # Notebooks sequenciais
+
+├── 📓 notebooks/           # Análise e desenvolvimento dos modelos│   ├── 01_problema_e_coleta_dados.ipynb
+
+├── 🌐 web/                # Sistema web funcional│   ├── 02_processamento_feature_engineering.ipynb
+
+├── 🤖 models/             # Modelos treinados (.pkl)│   ├── 03_modelagem_avaliacao.ipynb (baseline)
+
+├── 📊 data/               # Datasets│   ├── 03_5_evolucao_feature_engineering.ipynb ⭐ NOVO
+
+├── 📚 docs/               # Documentação│   ├── 04_otimizacao_hiperparametros.ipynb ⭐ NOVO
+
+└── 📋 requirements.txt    # Dependências│   ├── 05_modelo_super_otimizado.ipynb
+
+```│   ├── 06_deploy_predicoes.ipynb (tutorial deploy)
+
 │   └── README_EVOLUCAO_MODELOS.md (guia detalhado)
-├── 📊 data/                         # Dados
+
+---├── 📊 data/                         # Dados
+
 │   └── raw/
-│       └── dados_dengue_clima_saneamento_2014_2025.csv
+
+## 🔄 Evolução dos Modelos│       └── dados_dengue_clima_saneamento_2014_2025.csv
+
 ├── 🔧 src/                          # Código reutilizável
-│   ├── predict.py                   # Funções de predição (multi-modelo)
-│   ├── utils.py                     # Utilitários
-│   └── __init__.py
-├── 🌐 web/                          # 🎯 SISTEMA PRINCIPAL
-│   ├── app.py                       # Servidor Flask multi-modelo
+
+| Notebook | Técnica | MAE | Melhoria |│   ├── predict.py                   # Funções de predição (multi-modelo)
+
+|----------|---------|-----|----------|│   ├── utils.py                     # Utilitários
+
+| **03** | Baseline | 1,681 | - |│   └── __init__.py
+
+| **04** | Otimização | 661 | 61% |├── 🌐 web/                          # 🎯 SISTEMA PRINCIPAL
+
+| **05** | Super Otimizado | 404 | 76% |│   ├── app.py                       # Servidor Flask multi-modelo
+
 │   ├── templates/                   # Interface profissional
-│   ├── static/                      # CSS, JS, assets
+
+---│   ├── static/                      # CSS, JS, assets
+
 │   └── README_MULTI_MODELO.md       # Documentação específica
-├── 📋 requirements.txt              # Dependências do projeto
+
+## 🎯 Funcionalidades├── 📋 requirements.txt              # Dependências do projeto
+
 ├── 🛠️ SETUP.md                      # Guia de instalação
-└── 📖 README.md                     # Este arquivo
-```
-│   ├── predict.py                   # Funções de predição
-│   ├── utils.py                     # Utilitários
-│   └── __init__.py
+
+### 🌐 Sistema Web└── 📖 README.md                     # Este arquivo
+
+- **Interface intuitiva** com 2 modos (básico/avançado)```
+
+- **3 modelos simultâneos** para comparação│   ├── predict.py                   # Funções de predição
+
+- **Auto-preenchimento** de dados por estado│   ├── utils.py                     # Utilitários
+
+- **Análise consolidada** com intervalos de confiança│   └── __init__.py
+
 ├── 🌐 web/                          # Aplicação web Flask
-│   ├── app.py                       # Servidor web
-│   ├── templates/                   # Templates HTML
-│   └── static/                      # CSS, JS, assets
-├── 📋 requirements.txt              # Dependências do projeto
-├── 🛠️ SETUP.md                      # Guia de instalação
+
+### 📊 Notebooks│   ├── app.py                       # Servidor web
+
+- **Análise exploratória** completa dos dados│   ├── templates/                   # Templates HTML
+
+- **Feature engineering** avançado│   └── static/                      # CSS, JS, assets
+
+- **Otimização de hiperparâmetros**├── 📋 requirements.txt              # Dependências do projeto
+
+- **Comparação de modelos** (Random Forest, XGBoost, LightGBM)├── 🛠️ SETUP.md                      # Guia de instalação
+
 └── 📖 README.md                     # Este arquivo
-```
 
----
+---```
 
-## 🚀 **Como Executar**
 
-### 🎯 **SISTEMAS DISPONÍVEIS**
+
+## 🛠️ Tecnologias---
+
+
+
+- **Machine Learning**: Scikit-learn, XGBoost, LightGBM## 🚀 **Como Executar**
+
+- **Web**: Flask, Bootstrap, JavaScript
+
+- **Análise**: Pandas, NumPy, Matplotlib, Seaborn### 🎯 **SISTEMAS DISPONÍVEIS**
+
+- **Deploy**: Jupyter Notebooks
 
 #### 🌐 **Sistema Multi-Modelo (PRODUÇÃO - RECOMENDADO)**
-```bash
-cd web
-python app.py
-```
-**Acesse:** http://localhost:5000
 
-**🔥 SISTEMA PRINCIPAL** com interface profissional:
+---```bash
+
+cd web
+
+## 📈 Modelos Disponíveispython app.py
+
+```
+
+1. **🚀 XGBoost Super Otimizado** - Maior precisão (57 features)**Acesse:** http://localhost:5000
+
+2. **⭐ XGBoost Otimizado** - Boa performance (40 features)
+
+3. **🌳 Random Forest Baseline** - Modelo conservador**🔥 SISTEMA PRINCIPAL** com interface profissional:
+
 - ✅ **3 Modelos Simultâneos**: Random Forest, XGBoost, Ensemble
-- ✅ **Comparação Visual**: Cards lado a lado com análise consolidada
+
+---- ✅ **Comparação Visual**: Cards lado a lado com análise consolidada
+
 - ✅ **Modo Básico/Avançado**: Para diferentes tipos de usuário
-- ✅ **Sistema Robusto**: Fallback quando modelos não disponíveis
+
+## 📚 Documentação- ✅ **Sistema Robusto**: Fallback quando modelos não disponíveis
+
 - ✅ **Performance Superior**: MAE ~661 casos
 
-#### 📔 **Notebooks de Desenvolvimento**
-```bash
+- **GUIA_DETALHADO_NOTEBOOKS.md** - Guia completo dos notebooks
+
+- **web/README.md** - Manual do sistema web#### 📔 **Notebooks de Desenvolvimento**
+
+- **docs/** - Documentação adicional```bash
+
 jupyter notebook
-# Execute na ordem: 01 → 02 → 03 → 3.5 → 04 → 05 → 06
+
+---# Execute na ordem: 01 → 02 → 03 → 3.5 → 04 → 05 → 06
+
 ```
 
+## 🎯 Para Apresentação
+
 **Propósito**: Demonstrar processo completo de ML
-- 📚 **Notebook 6**: Tutorial de como fazer deploy (educativo)
+
+Execute o **sistema web** em `web/app.py` - interface profissional pronta para demonstrações.- 📚 **Notebook 6**: Tutorial de como fazer deploy (educativo)
+
 - 🎯 **Foco**: Aprendizado e documentação do processo
 
 ---
 
+---
+
+**Desenvolvido para FIAP - Tech Challenge Fase 3**
 ### 1. **Instalação:**
 
 ```bash
