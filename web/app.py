@@ -415,7 +415,7 @@ def get_api_info():
 if __name__ == '__main__':
     # Detecta se está em produção ou desenvolvimento
     is_production = os.environ.get('FLASK_ENV') == 'production'
-    
+
     if not is_production:
         print("🚀 Iniciando Sistema de Predição de Dengue...")
         print("📊 Tech Challenge - FIAP - Fase 3")
