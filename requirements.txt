@@ -6,7 +6,7 @@
 # === CORE DATA SCIENCE ===
 pandas>=1.5.0
 numpy==1.26.0
-scipy==1.15.0
+scipy==1.13.1
 openpyxl==3.1.5
 
 # === MACHINE LEARNING ===
@@ -43,4 +43,5 @@ optuna>=3.0.0
 # ==========================================
 # INSTALAÇÃO: pip install -r requirements.txt
 # Python: 3.8+
+
 # ==========================================
